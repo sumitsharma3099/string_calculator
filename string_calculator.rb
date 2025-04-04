@@ -34,7 +34,7 @@ class StringCalculator
   def extract_delimiters(delimiter_info)
     # Handle delimiters of any length
     delimiter_info[2..-1] # Remove "//" prefix
-    delimiters = delimiter_info[2..-1].match(/\[(.*)\]/)
-    delimiters.to_a[1].split('][')
+    delimiters = delimiter_info[2..-1].scan(/\[(.*?)\]/).flatten
+    delimiters
   end
 end
