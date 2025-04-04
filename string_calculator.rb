@@ -6,8 +6,8 @@ class StringCalculator
     # Check for custom delimiters
     if numbers.start_with?("//")
       delimiter_info, numbers = numbers.split("\n", 2)
-      delimiters = delimiter_info[2..-1] # Remove the "//" prefix
-      numbers = numbers.split(delimiters).map(&:to_i)
+      delimiters = extract_delimiters(delimiter_info)
+      numbers = split_numbers(numbers, delimiters)
     else
       # Default to handling commas and newlines
       numbers = numbers.split(/[\n,]/).map(&:to_i)
@@ -23,5 +23,18 @@ class StringCalculator
     numbers = numbers.select { |num| num <= 1000 }
 
     numbers.sum
+  end
+
+  private
+
+  def split_numbers(numbers, delimiters)
+    numbers.split(Regexp.union(delimiters)).map(&:to_i)
+  end
+
+  def extract_delimiters(delimiter_info)
+    # Handle delimiters of any length
+    delimiter_info[2..-1] # Remove "//" prefix
+    delimiters = delimiter_info[2..-1].match(/\[(.*)\]/)
+    delimiters.to_a[1].split('][')
   end
 end
