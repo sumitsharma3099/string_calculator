@@ -28,13 +28,17 @@ class StringCalculator
   private
 
   def split_numbers(numbers, delimiters)
+    # Split by the provided delimiters using a regex
     numbers.split(Regexp.union(delimiters)).map(&:to_i)
   end
 
   def extract_delimiters(delimiter_info)
-    # Handle delimiters of any length
-    delimiter_info[2..-1] # Remove "//" prefix
-    delimiters = delimiter_info[2..-1].scan(/\[(.*?)\]/).flatten
+    # Extract delimiters and return as an array
+    if delimiter_info[2] == '['
+      delimiters = delimiter_info[2..-1].scan(/\[(.*?)\]/).flatten
+    else
+      delimiters = [delimiter_info[2]]
+    end
     delimiters
   end
 end
